@@ -11,4 +11,8 @@ class _LoginUIScreenState extends State<LoginUIScreen>{
   Widget build(BuildContext context) {
     return null;
   }
+
+  login() {
+    // Get the Username and password from the EditTextControllers here, and user LoginService to post these results
+  }
 }

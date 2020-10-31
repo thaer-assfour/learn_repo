@@ -3,18 +3,21 @@
 import 'package:learn_app/fake_server/fake_server.dart';
 
 class LoginService {
-  // Post Login Details Here, and Publish Results to LoginUIScreen
-  // NOTE: HTTP_CLIENT ONLY HERE
-
+  // TODO: This should be final
   FakeServer _fakeServer = FakeServer();
 
+  // TODO: Inject Server into the constructor
+  LoginService(){}
+
+  // TODO: NEVER USE DYNAMIC
   Future<dynamic> login(String email, String password) async {
-    // Post the result to the server. if logged in return true, else return false
-    // Use FakeServer Class for now
 
     Map<String, dynamic> data = {'email': email, 'password': password};
+
+    // TODO Replace This with Real Login, Use Auth0 https://auth0.com/
     dynamic response = await _fakeServer.post(data);
 
+    // TODO: Response was Changed, Please update your code te reflect the exact result
     if (response == false) // if user data is invalid return false login
       return false;
     else

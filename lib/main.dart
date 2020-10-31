@@ -18,6 +18,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      // TODO: Add Register Page
       home: LoginUIScreen(),
     );
   }

@@ -19,6 +19,12 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
   bool validatePassword =
       false; // to enable autoValidate password after starting type.
 
+
+  // TODO: This Should reflect the 3 states of the screen, Connection Error, Login Success, Login Failed
+  // To test this, AFTER implenting Auth0 Logic, Login Correctly, Login With false info, and Login with no internet
+  // The Login Screen should tell you what is going
+  // Think of a way to combine the states into a single variable ;)
+  // TODO: Add a Link to Register Page
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -115,8 +121,8 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
     );
   }
 
+  // TODO: NEVER use dynamic
   dynamic login(email, password) async {
-    // Get the Username and password from the EditTextControllers here, and user LoginService to post these results
     LoginService loginService = LoginService();
     loginState = await loginService.login(email, password);
     setState(() {

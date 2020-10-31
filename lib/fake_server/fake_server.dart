@@ -1,14 +1,11 @@
 class FakeServer {
   Future<dynamic> post(Map<String, dynamic> data) async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 1));
 
     if (data['email'] == 'admin' && data['password'] == 'admin') {
-      return {
-        'token': 'sometoken'
-      };
+      return {'token': 'Admin-Token'}; // when user is correct return the token for given user.
     } else {
-      return null;
+      return false; // when user is invalid return false.
     }
   }
-
 }

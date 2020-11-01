@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login/login_ui.dart';
+import 'package:learn_app/welcome/welcome_ui.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       // TODO: Add Register Page
-      home: LoginUIScreen(),
+      home: WelcomeUI(),
     );
   }
 }

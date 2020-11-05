@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_app/Auth0/auth_server.dart';
 import 'package:learn_app/fake_server/fake_server.dart';
 import 'package:learn_app/home/home.dart';
 import 'package:learn_app/login/login_service.dart';
@@ -114,10 +115,10 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
                                   .text); // get value from login function.
                           if (loginState != "false") {
                             // value not false => user is valid.
-                            Navigator.pushReplacement(context,
+                            /*Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) {
                               return LoginSuccessPage(loginState);
-                            }));
+                            }));*/
                           }
                         },
                   child: Text("Login"),
@@ -145,14 +146,15 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
     );
   }
 
-  // TODO: NEVER use dynamic
+
   Future<String> login(email, password) async {
-    final fakeServer = FakeServer();
-    LoginService loginService = LoginService(fakeServer);
+    final authServer = AuthServer();
+    LoginService loginService = LoginService(authServer);
     loginState = await loginService.login(email, password);
+    print(loginState);
     setState(() {
       isLoading = false;
     });
-    return loginState;
+    return "";
   }
 }

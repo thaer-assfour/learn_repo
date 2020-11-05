@@ -20,6 +20,25 @@ class AuthServer {
     return response;
   }
 
+  Future<http.Response> login(Map<String, String> data) async {
+    String _email = data['email'];
+    String _password = data['password'];
+
+    String url = "$authDomain" + "/oauth/token";
+    Map<String, String> body = {
+      "grant_type": "$grantType",
+      "client_id": "$authClientId",
+      "audience": "$audience",
+      "username": "$_email",
+      "password": "$_password",
+      "client_secret": "$clientSecret"
+    };
+
+    var response = await http.post(url, body: body);
+    return response;
+  }
+
+
 
 
 

@@ -1,28 +1,23 @@
 // Requests and API Logic Happens Here.
 
-import 'package:learn_app/fake_server/fake_server.dart';
+import 'dart:convert';
+import 'package:http/http.dart';
+import 'package:learn_app/Auth0/auth_server.dart';
 
 class LoginService {
-  // TODO: This should be final
-  final FakeServer _fakeServer = FakeServer();
+  final AuthServer _authServer = AuthServer();
 
-  // TODO: Inject Server into the constructor
-  LoginService(_fakeServer);
+  LoginService(_authServer);
 
-  // TODO: NEVER USE DYNAMIC
   Future<String> login(String email, String password) async {
-
     Map<String, String> data = {'email': email, 'password': password};
 
-    // TODO Replace This with Real Login, Use Auth0 https://auth0.com/
-    dynamic response = await _fakeServer.post(data);
+    Response response = await _authServer.login(data);
 
-    // TODO: Response was Changed, Please update your code te reflect the exact result
-    if (response == false) // if user data is invalid return false login
-      return "false";
-    else
-      return response['token']; // if user data is valid return token data for user
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      return body["access_token"];
+    } else
+      return "Error";
   }
-
-
 }

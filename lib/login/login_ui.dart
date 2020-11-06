@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_app/Auth0/auth_server.dart';
-import 'package:learn_app/fake_server/fake_server.dart';
 import 'package:learn_app/home/home.dart';
+
 import 'package:learn_app/login/login_service.dart';
 
 class LoginUIScreen extends StatefulWidget {
@@ -14,18 +13,15 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
   final GlobalKey<FormState> key = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  Map<String, dynamic> loginResult; // login result from services
+  Map<String, dynamic> userProfile; // user profile data after success login
+  String _errorMsg; // define the error msg to show on screen
 
   bool isLoading = false; // to enable circular indicator when loading.
-  String loginState; // return value from login.
   bool validateName = false; // to enable autoValidate name after starting type.
   bool validatePassword =
       false; // to enable autoValidate password after starting type.
 
-  // TODO: This Should reflect the 3 states of the screen, Connection Error, Login Success, Login Failed
-  // To test this, AFTER implenting Auth0 Logic, Login Correctly, Login With false info, and Login with no internet
-  // The Login Screen should tell you what is going
-  // Think of a way to combine the states into a single variable ;)
-  // TODO: Add a Link to Register Page
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -52,6 +48,7 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 32, left: 32, top: 24),
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     autovalidate: validateName,
                     validator: (value) {
@@ -107,18 +104,18 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
                       : () async {
                           setState(() {
                             isLoading = true; // end circular indicator.
-                            loginState = null; // initial val for login state.
+                            _errorMsg = null;
                           });
                           await login(
                               _emailController.text,
                               _passwordController
                                   .text); // get value from login function.
-                          if (loginState != "false") {
+                          if (loginResult["loginStatus"] == 200) {
                             // value not false => user is valid.
-                            /*Navigator.pushReplacement(context,
+                            Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) {
-                              return LoginSuccessPage(loginState);
-                            }));*/
+                              return LoginSuccessPage(userProfile);
+                            }));
                           }
                         },
                   child: Text("Login"),
@@ -127,17 +124,15 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
                   child: isLoading ? CircularProgressIndicator() : null,
                 ),
                 Container(
-                  child: (loginState != "false" ||
-                          loginState ==
-                              null) // when login state is false return error msg.
+                  child: (_errorMsg == null)
                       ? null
                       : Text(
-                          "Email or password is incorrect",
+                          _errorMsg,
                           style: TextStyle(
                               color: Colors.redAccent,
-                              fontWeight: FontWeight.w600),
+                              fontWeight: FontWeight.bold),
                         ),
-                ),
+                )
               ],
             ),
           ),
@@ -146,15 +141,18 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
     );
   }
 
-
-  Future<String> login(email, password) async {
+  Future login(email, password) async {
     final authServer = AuthServer();
     LoginService loginService = LoginService(authServer);
-    loginState = await loginService.login(email, password);
-    print(loginState);
+    loginResult = await loginService.login(email, password);
+
+    if (loginResult["loginStatus"] == 200)
+      userProfile = await loginService.getProfile(loginResult["access_token"]);
+    else
+      _errorMsg = loginResult["error_description"].toString();
+
     setState(() {
       isLoading = false;
     });
-    return "";
   }
 }

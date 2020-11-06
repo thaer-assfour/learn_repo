@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'auth0_setting.dart';
 
 class AuthServer {
+
+
   Future<http.Response> signUp(Map<String, dynamic> data) async {
     String _email = data['email'];
     String _password = data['password'];
@@ -15,9 +18,16 @@ class AuthServer {
       "connection": "$authConnectionUPA"
     };
 
-    var response = await http.post(url, body: body);
 
-    return response;
+    try {
+      var response = await http.post(url, body: body);
+      return response;
+    } on SocketException catch (e) {
+      return null;
+    }
+
+
+
   }
 
   Future<http.Response> login(Map<String, String> data) async {
@@ -31,19 +41,26 @@ class AuthServer {
       "audience": "$audience",
       "username": "$_email",
       "password": "$_password",
-      "client_secret": "$clientSecret"
+      "client_secret": "$clientSecret",
+      "scope": "$scope"
     };
 
-    var response = await http.post(url, body: body);
-    return response;
+    try {
+      var response = await http.post(url, body: body);
+      return response;
+    } on SocketException catch (e) {
+      return null;
+    }
   }
 
-
-
-
-
-
-
-
-
+  Future<http.Response> getProfile(String accessToken) async {
+    String url = "$authDomain" + "/userinfo";
+    var response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    return response;
+  }
 }

@@ -1,17 +1,16 @@
 // Login Success Page
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:learn_app/login/login_ui.dart';
+import 'package:learn_app/welcome/welcome_ui.dart';
 
 // ignore: must_be_immutable
 class LoginSuccessPage extends StatefulWidget {
-  String token;
+  Map<String, dynamic> userData;
 
   @override
   _LoginSuccessPageState createState() => _LoginSuccessPageState();
 
-  LoginSuccessPage(this.token);
+  LoginSuccessPage(this.userData);
 }
 
 class _LoginSuccessPageState extends State<LoginSuccessPage> {
@@ -26,12 +25,17 @@ class _LoginSuccessPageState extends State<LoginSuccessPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("User-ID: " + widget.token),
+            CircleAvatar(
+              radius: 32,
+              backgroundImage: NetworkImage(widget.userData["picture"]),
+            ),
+            Text("Name: " + widget.userData["name"]),
+            Text("Email: " + widget.userData["email"]),
             RaisedButton(
               onPressed: () {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return LoginUIScreen();
+                  return WelcomeUI();
                 }));
               },
               child: Text("Logout"),

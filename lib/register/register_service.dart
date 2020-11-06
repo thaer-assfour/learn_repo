@@ -6,8 +6,6 @@ import 'package:learn_app/Auth0/auth_server.dart';
 class RegisterService {
 
   final AuthServer _authServer = AuthServer();
-
-
   RegisterService(_authServer);
 
 
@@ -15,12 +13,19 @@ class RegisterService {
 
     Map<String, dynamic> _data = {'email': email, 'password': password};
 
-    Response response = await _authServer.signUp(_data);
+    Response response = await _authServer.signUp(_data).timeout(Duration(seconds: 5));
 
       if(response.statusCode == 200)
         return "Success";
         else
           return "Error";
+
+
+
+
+
+
+
 
   }
 

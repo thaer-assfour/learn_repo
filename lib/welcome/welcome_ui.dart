@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_app/login/login_ui.dart';
 import 'package:learn_app/register/register_ui.dart';
@@ -9,7 +8,7 @@ class WelcomeUI extends StatefulWidget {
 }
 
 class _WelcomeUIState extends State<WelcomeUI> {
-  bool login_Register = true;
+  bool loginRegister = true; // variable to specify which screen appeared
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +20,9 @@ class _WelcomeUIState extends State<WelcomeUI> {
         children: [
           Container(
             height: MediaQuery.of(context).size.height * 0.50,
-            child: login_Register ? LoginUIScreen() : RegisterUIScreen(),
+            child: loginRegister ? LoginUIScreen() : RegisterUIScreen(),
           ),
-          login_Register
+          loginRegister
               ? Column(
                   children: [
                     Text("Don't have account? ",
@@ -39,7 +38,7 @@ class _WelcomeUIState extends State<WelcomeUI> {
                       ),
                       onTap: () {
                         setState(() {
-                          login_Register = !login_Register;
+                          loginRegister = !loginRegister;
                         });
                       },
                     )
@@ -60,7 +59,7 @@ class _WelcomeUIState extends State<WelcomeUI> {
                       ),
                       onTap: () {
                         setState(() {
-                          login_Register = !login_Register;
+                          loginRegister = !loginRegister;
                         });
                       },
                     )

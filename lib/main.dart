@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // TODO: Add Register Page
+
       home: WelcomeUI(), // added welcome screen to switch between 2 widgets for register and login
     );
   }

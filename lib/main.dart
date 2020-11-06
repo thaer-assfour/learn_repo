@@ -15,11 +15,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       // TODO: Add Register Page
-      home: WelcomeUI(),
+      home: WelcomeUI(), // added welcome screen to switch between 2 widgets for register and login
     );
   }
 }

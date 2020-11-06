@@ -21,6 +21,7 @@ class AuthServer {
 
     try {
       var response = await http.post(url, body: body);
+
       return response;
     } on SocketException catch (e) {
       return null;

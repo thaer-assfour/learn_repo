@@ -12,6 +12,8 @@ class _RegisterUIScreenState extends State<RegisterUIScreen> {
   final GlobalKey<FormState> key = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  Map<String, dynamic> registerResult;
+  String _registerMsg; // define the error msg to show on screen
 
   bool isLoading = false; // to enable circular indicator when loading.
   String registerState; // return value from login.
@@ -44,6 +46,7 @@ class _RegisterUIScreenState extends State<RegisterUIScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 32, left: 32, top: 24),
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     autovalidate: validateName,
                     validator: (value) {
@@ -102,7 +105,7 @@ class _RegisterUIScreenState extends State<RegisterUIScreen> {
                       : () async {
                           setState(() {
                             isLoading = true; // end circular indicator.
-                            registerState =
+                            _registerMsg =
                                 null; // initial val for login state.
                           });
                           await register(
@@ -116,22 +119,15 @@ class _RegisterUIScreenState extends State<RegisterUIScreen> {
                   child: isLoading ? CircularProgressIndicator() : null,
                 ),
                 Container(
-                    child: (registerState ==
-                            "Success") // when login state is false return error msg.
+                    child: (_registerMsg !=
+                            null) // when login state is false return error msg.
                         ? Text(
-                            "Registration succeeded",
+                            _registerMsg,
                             style: TextStyle(
-                                color: Colors.blue,
+                                color: (registerResult["registerStatus"] == 200) ? Colors.blue : Colors.redAccent,
                                 fontWeight: FontWeight.w600),
                           )
-                        : (registerState == "Error")
-                            ? Text(
-                                "An error occurred while registration",
-                                style: TextStyle(
-                                    color: Colors.redAccent,
-                                    fontWeight: FontWeight.w600),
-                              )
-                            : null),
+                        : null),
               ],
             ),
           ),
@@ -140,13 +136,20 @@ class _RegisterUIScreenState extends State<RegisterUIScreen> {
     );
   }
 
-  Future<String> register(email, password) async {
+  Future register(email, password) async {
     final authServer = AuthServer();
     RegisterService registerService = RegisterService(authServer);
-    registerState = await registerService.register(email, password);
+    registerResult = await registerService.register(email, password);
+    print(registerResult["registerStatus"]);
+    if (registerResult["registerStatus"] == 200)
+      _registerMsg = "Register succeeded";
+    else
+      _registerMsg = registerResult["description"].toString();
+
+
     setState(() {
       isLoading = false;
     });
-    return registerState;
+
   }
 }

@@ -22,7 +22,7 @@ class LoginService {
     } else {
       _result = {
         "loginStatus": 999,
-        "error_description": "No internet service, connection Time out",
+        "error_description": "No internet service - connection Time out",
       };
     }
 

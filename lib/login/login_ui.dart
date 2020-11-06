@@ -15,7 +15,7 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
   final _passwordController = TextEditingController();
   Map<String, dynamic> loginResult; // login result from services
   Map<String, dynamic> userProfile; // user profile data after success login
-  String _errorMsg; // define the error msg to show on screen
+  String _loginMsg; // define the error msg to show on screen
 
   bool isLoading = false; // to enable circular indicator when loading.
   bool validateName = false; // to enable autoValidate name after starting type.
@@ -104,7 +104,7 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
                       : () async {
                           setState(() {
                             isLoading = true; // end circular indicator.
-                            _errorMsg = null;
+                            _loginMsg = null;
                           });
                           await login(
                               _emailController.text,
@@ -124,10 +124,10 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
                   child: isLoading ? CircularProgressIndicator() : null,
                 ),
                 Container(
-                  child: (_errorMsg == null)
+                  child: (_loginMsg == null)
                       ? null
                       : Text(
-                          _errorMsg,
+                          _loginMsg,
                           style: TextStyle(
                               color: Colors.redAccent,
                               fontWeight: FontWeight.bold),
@@ -149,7 +149,7 @@ class _LoginUIScreenState extends State<LoginUIScreen> {
     if (loginResult["loginStatus"] == 200)
       userProfile = await loginService.getProfile(loginResult["access_token"]);
     else
-      _errorMsg = loginResult["error_description"].toString();
+      _loginMsg = loginResult["error_description"].toString();
 
     setState(() {
       isLoading = false;
